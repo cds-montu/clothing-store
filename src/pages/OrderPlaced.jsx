@@ -5,121 +5,106 @@ export default function OrderPlaced() {
   const { state } = useLocation();
   const form = state?.form;
 
+  // Disable scrolling on mount
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = "auto"; // Restore on unmount
     };
   }, []);
 
   return (
-    <div style={styles.wrapper}>
+    <div style={styles.container}>
       <div style={styles.card}>
-        <div style={styles.header}>
-          <div style={styles.icon}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="32"
-              height="32"
-              fill="none"
-              stroke="white"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              viewBox="0 0 24 24"
-            >
-              <path d="M20 6L9 17l-5-5" />
-            </svg>
-          </div>
-          <h1 style={styles.title}>Order Successfully Placed</h1>
-          <p style={styles.subtitle}>
-            Thank you <b>{form?.name}</b>! We’re getting your order ready.
+        <div style={styles.successIcon}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="60"
+            height="60"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#28a745"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M20 6L9 17l-5-5" />
+          </svg>
+        </div>
+
+        <h2 style={styles.heading}>Your Order is Confirmed!</h2>
+        <p style={styles.subtext}>
+          Thanks <b>{form?.name}</b>! We've received your order and it's being processed.
+        </p>
+
+        <div style={styles.detailBox}>
+          <p><span>📦 Delivery To:</span><br />{form?.address}</p>
+          <p><span>💳 Payment Method:</span><br />
+            {form?.payment === "upi"
+              ? `UPI (${form?.upi})`
+              : "Cash on Delivery"}
           </p>
         </div>
 
-        <div style={styles.details}>
-          <div style={styles.row}>
-            <label>Delivery Address</label>
-            <p>{form?.address}</p>
-          </div>
-          <div style={styles.row}>
-            <label>Payment Method</label>
-            <p>{form?.payment === "upi" ? `UPI (${form?.upi})` : "Cash on Delivery"}</p>
-          </div>
-        </div>
-
-        <Link to="/" style={styles.button}>
-          Return to Home
+        <Link to="/" style={styles.homeBtn}>
+          Back to Home
         </Link>
       </div>
     </div>
   );
 }
 
+
 const styles = {
-  wrapper: {
+  container: {
     height: "100vh",
     width: "100vw",
-    background: "linear-gradient(to right, #e0f2ff, #f6fbff)",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    overflow: "hidden",
-    padding: "20px",
+    background: "linear-gradient(to right, #e8f0ff, #f8faff)",
+    overflow: "hidden", // Prevent scroll inside component
   },
   card: {
-    background: "#ffffff",
-    borderRadius: "16px",
-    padding: "40px 32px",
-    width: "100%",
-    maxWidth: "460px",
-    boxShadow: "0 12px 35px rgba(0,0,0,0.1)",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  header: {
+    backgroundColor: "#fff",
+    padding: "40px 30px",
+    borderRadius: "14px",
+    boxShadow: "0 12px 40px rgba(0,0,0,0.1)",
     textAlign: "center",
-    marginBottom: "30px",
+    maxWidth: "480px",
+    width: "100%",
   },
-  icon: {
-    backgroundColor: "#28a745",
-    width: "60px",
-    height: "60px",
-    borderRadius: "50%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    margin: "0 auto 16px auto",
+  successIcon: {
+    marginBottom: "20px",
   },
-  title: {
-    fontSize: "24px",
+  heading: {
+    fontSize: "26px",
+    marginBottom: "10px",
     color: "#222",
-    marginBottom: "6px",
   },
-  subtitle: {
+  subtext: {
     fontSize: "16px",
     color: "#555",
-  },
-  details: {
-    width: "100%",
-    backgroundColor: "#f1f7ff",
-    borderRadius: "12px",
-    padding: "20px",
     marginBottom: "25px",
-    lineHeight: "1.5",
   },
-  row: {
-    marginBottom: "16px",
+  detailBox: {
+    background: "#f1f5ff",
+    padding: "15px 20px",
+    borderRadius: "10px",
+    color: "#333",
+    fontSize: "15px",
+    textAlign: "left",
+    lineHeight: "1.6",
+    marginBottom: "25px",
   },
-  button: {
-    backgroundColor: "#007bff",
-    color: "white",
-    padding: "12px 28px",
+  homeBtn: {
+    display: "inline-block",
+    padding: "12px 24px",
+    backgroundColor: "#28a745",
+    color: "#fff",
     textDecoration: "none",
     borderRadius: "8px",
-    fontWeight: "600",
-    transition: "background 0.3s ease",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+    fontWeight: "bold",
+    transition: "background 0.3s ease-in-out",
   },
 };

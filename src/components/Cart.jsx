@@ -59,7 +59,7 @@ export default function Cart({ cart, updateCart }) {
             <button
               onClick={() => navigate("/checkout")}
               style={{
-                backgroundColor: "#007bff", color: "#fff", padding: "10px 20px",
+                backgroundColor: "#28a745", color: "#fff", padding: "10px 20px",
                 border: "none", borderRadius: "6px", cursor: "pointer", fontSize: "16px"
               }}
             >
