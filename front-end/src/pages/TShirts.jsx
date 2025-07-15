@@ -1,35 +1,30 @@
 import React from "react";
-import ProductCard from "../components/ProductCard";
 import { PRODUCTS } from "../data/products";
 
-const Home = () => {
+const TShirts = () => {
+  const tshirts = PRODUCTS.filter((product) => product.category === "T-Shirts");
+
   return (
-    <div style={styles.container}>
-      <h2 style={styles.heading}>🔥 Trending Products</h2>
-      <div style={styles.grid}>
-        {PRODUCTS.map((product) => (
-          <ProductCard key={product.id} product={product} />
+    <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "40px 20px" }}>
+      <h2 style={{ marginBottom: "20px" }}>T-Shirts</h2>
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+        gap: "20px",
+      }}>
+        {tshirts.map((product) => (
+          <div key={product.id} style={{
+            border: "1px solid #ddd", borderRadius: "10px", padding: "10px",
+            textAlign: "center", boxShadow: "0 2px 8px rgba(0,0,0,0.1)"
+          }}>
+            <img src={product.image} alt={product.name} style={{ width: "100%", height: "240px", objectFit: "cover" }} />
+            <h3>{product.name}</h3>
+            <p>₹{product.price}</p>
+          </div>
         ))}
       </div>
     </div>
   );
 };
 
-const styles = {
-  container: {
-    padding: "30px",
-  },
-  heading: {
-    fontSize: "24px",
-    fontWeight: "bold",
-    marginBottom: "20px",
-    color: "#333",
-  },
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-    gap: "25px",
-  },
-};
-
-export default Home;
+export default TShirts;

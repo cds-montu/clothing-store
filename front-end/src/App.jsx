@@ -11,6 +11,7 @@ import TopBottomWear from "./pages/TopBottomWear";
 import TShirts from "./pages/TShirts";
 import Shirts from "./pages/Shirts";
 import AdminPanel from "./pages/AdminPanel";
+import ProductDetail from "./pages/ProductDetail";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/order-placed" element={<OrderPlaced />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/admin" element={<AdminPanel />} />
       </Routes>
     </Router>

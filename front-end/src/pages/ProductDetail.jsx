@@ -1,75 +1,39 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { PRODUCTS } from "../data/products";
+import React, { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchProducts } from "../redux/slices/productSlice";
 
-export default function ProductDetail({ cart, updateCart }) {
+const ProductDetail = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
-  const product = PRODUCTS.find(p => p.id === parseInt(id));
+  const dispatch = useDispatch();
+  const { items } = useSelector((state) => state.products);
 
-  const handleAdd = () => {
-    updateCart([...cart, product]);
-  };
+  useEffect(() => {
+    if (!items.length) {
+      dispatch(fetchProducts());
+    }
+  }, [dispatch, items.length]);
 
-  if (!product) return <p style={{ padding: "20px" }}>Product not found</p>;
+  const product = items.find((item) => item.id === parseInt(id));
+
+  if (!product) return <p style={{ textAlign: "center" }}>Loading...</p>;
 
   return (
-    <div style={{ padding: "40px", maxWidth: "1000px", margin: "auto" }}>
-      <button
-        onClick={() => navigate(-1)}
-        style={{
-          background: "none",
-          border: "none",
-          color: "#007bff",
-          fontSize: "16px",
-          marginBottom: "20px",
-          cursor: "pointer"
-        }}
-      >
-        ← Back
-      </button>
-      
-      <div style={{
-        display: "flex",
-        gap: "30px",
-        padding: "40px",
-        maxWidth: "1000px",
-        margin: "auto",
-        alignItems: "flex-start"
-      }}>
-        <img src={product.image} alt={product.name}
-          style={{
-            width: "400px",
-            height: "auto",
-            borderRadius: "10px",
-            boxShadow: "0 6px 20px rgba(0,0,0,0.1)",
-          }}
-        />
-
-        <div style={{ flex: 1 }}>
-          <h2 style={{ fontSize: "2rem", marginBottom: "10px" }}>{product.name}</h2>
-          <h4 style={{ color: "#28a745", fontSize: "1.4rem" }}>₹{product.price}</h4>
-          <p style={{ margin: "20px 0", color: "#555" }}>
-            Experience unmatched comfort and timeless style with our premium <b>{product.name}</b>,
-            expertly crafted from high-quality fabric. Designed for everyday elegance,
-            this piece blends durability, sophistication, and comfort — perfect for any occasion, every season.
-          </p>
-
-          <button
-            onClick={handleAdd}
-            style={{
-              backgroundColor: "#007bff",
-              color: "#fff",
-              padding: "10px 20px",
-              border: "none",
-              borderRadius: "6px",
-              fontSize: "16px",
-              cursor: "pointer"
-            }}
-          >
-            Add to Cart 🛒
-          </button>
-        </div>
-      </div>
+    <div style={{ maxWidth: "800px", margin: "40px auto", padding: "20px" }}>
+      <img
+        src={product.image}
+        alt={product.name}
+        style={{ width: "100%", maxHeight: "400px", objectFit: "cover", borderRadius: "8px" }}
+      />
+      <h2 style={{ marginTop: "20px" }}>{product.name}</h2>
+      <p style={{ color: "#777" }}>{product.category}</p>
+      <h3>₹{product.price}</h3>
+      <p style={{ marginTop: "10px" }}>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla at sem eu velit suscipit
+        tincidunt. 
+      </p>
     </div>
   );
-}
+};
+
+export default ProductDetail;
