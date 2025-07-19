@@ -3,9 +3,10 @@ import db from "../db/db.js";
 import multer from "multer";
 import csv from "csv-parser";
 import fs from "fs";
+import path from "path";
 
-const upload = multer({ dest: "uploads/" });
 const router = express.Router();
+const upload = multer({ dest: "uploads/" });
 
 // GET all products
 router.get("/", async (req, res) => {
@@ -29,16 +30,18 @@ router.post("/add", async (req, res) => {
   }
 });
 
-// ✅ BULK UPLOAD using multer
-router.post("/bulk-upload", upload.single("file"), async (req, res) => {
+// ✅ BULK UPLOAD - fixed version
+router.post("/bulk-upload", async (req, res) => {
   try {
-    if (!req.file) {
+    if (!req.files || !req.files.file) {
       return res.status(400).json({ error: "No file uploaded" });
     }
 
-    const results = [];
-    const filePath = req.file.path;
+    const file = req.files.file;
+    const filePath = `./uploads/${file.name}`;
+    await file.mv(filePath);
 
+    const results = [];
     fs.createReadStream(filePath)
       .pipe(csv())
       .on("data", (data) => results.push(data))
@@ -56,5 +59,6 @@ router.post("/bulk-upload", upload.single("file"), async (req, res) => {
     res.status(500).json({ error: "Bulk upload failed" });
   }
 });
+
 
 export default router;

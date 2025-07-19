@@ -1,101 +1,118 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../redux/slices/productSlice";
+import { Box, Typography, Button, Container } from "@mui/material";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import fashionBanner from "../images/fashionBanner.png";
+
+
+
 
 const Home = () => {
-  const dispatch = useDispatch();
-  const { items, loading, error } = useSelector((state) => state.products);
-
-  useEffect(() => {
-    dispatch(fetchProducts());
-  }, [dispatch]);
-
-  if (loading) return <p style={statusStyle}>Loading...</p>;
-  if (error) return <p style={statusStyle}>Error loading products</p>;
-
+  const navigate = useNavigate();
   return (
-    <div style={wrapperStyle}>
-      <div style={gridStyle}>
-        {items.map((product) => (
-          <div
-            key={product.id}
-            style={cardStyle}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.02)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-          >
-            <Link to={`/product/${product.id}`} style={{ textDecoration: "none", color: "#333" }}>
-              <img
-                src={product.image}
-                alt={product.name}
-                style={imgStyle}
-              />
-              <div style={textWrapper}>
-                <h3 style={titleStyle}>{product.name}</h3>
-                <p style={categoryStyle}>{product.category}</p>
-                <p style={priceStyle}>₹{product.price}</p>
-              </div>
-            </Link>
-          </div>
-        ))}
-      </div>
-    </div>
+    <Box>
+      <Box
+        sx={{
+          height: "100vh",
+          backgroundImage: `url(${fashionBanner})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          position: "relative",
+        }}
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            bgcolor: "rgba(0,0,0,0.5)",
+          }}
+        />
+        <Box
+          sx={{
+            zIndex: 1,
+            color: "#fff",
+            textAlign: "center",
+            px: 4,
+          }}
+        >
+          <Typography variant="h3" fontWeight={700} gutterBottom>
+            Discover Our Latest Collection
+          </Typography>
+          <Typography variant="h6" gutterBottom>
+            Fashion that speaks for you
+          </Typography>
+          <Button variant="contained" onClick={() => navigate("/new-arrivals")}>
+            Shop Now
+          </Button>
+        </Box>
+      </Box>
+
+      {/* Trending Section */}
+      <Container sx={{ py: 8 }}>
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <Typography variant="h4" textAlign="center" fontWeight="bold" gutterBottom>
+            Trending Now
+          </Typography>
+          <Typography variant="subtitle1" textAlign="center" sx={{ maxWidth: 600, mx: "auto" }}>
+            Curated looks for this season. Handpicked styles that define confidence and elegance.
+          </Typography>
+          <Box sx={{ display: "flex", justifyContent: "center", gap: 4, mt: 5, flexWrap: "wrap" }}>
+            <Button component={Link} to="/Men" variant="outlined">Men</Button>
+            <Button component={Link} to="/Women" variant="outlined">Women</Button>
+            <Button component={Link} to="/TShirts" variant="outlined">T-Shirts</Button>
+            <Button component={Link} to="/Shirts" variant="outlined">Shirts</Button>
+          </Box>
+        </motion.div>
+      </Container>
+
+      {/* Mood Section */}
+      <Box
+        sx={{
+          backgroundImage: `url("https://images.unsplash.com/photo-1593032457869-5e8d6c9c9b6f")`,
+          backgroundAttachment: "fixed",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          height: "70vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Typography
+          variant="h3"
+          sx={{ backgroundColor: "rgba(255,255,255,0.7)", px: 4, py: 2, borderRadius: 2 }}
+        >
+          Fashion is a language. Speak yours.
+        </Typography>
+      </Box>
+
+      {/* CTA Final Section */}
+      <Container sx={{ py: 10, textAlign: "center" }}>
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          whileInView={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.6 }}
+        >
+          <Typography variant="h4" gutterBottom fontWeight="bold">
+            Ready to Redefine Your Look?
+          </Typography>
+          <Button component={Link} to="/All" variant="contained" size="large">
+            Browse All Products
+          </Button>
+        </motion.div>
+      </Container>
+    </Box>
   );
-};
-
-// 🔧 Styles
-const wrapperStyle = {
-  maxWidth: "1200px",
-  margin: "0 auto",
-  padding: "40px 20px",
-};
-
-const gridStyle = {
-  display: "grid",
-  gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-  gap: "20px",
-};
-
-const cardStyle = {
-  background: "#fff",
-  borderRadius: "10px",
-  overflow: "hidden",
-  boxShadow: "0 4px 14px rgba(0,0,0,0.1)",
-  transition: "transform 0.3s ease",
-};
-
-const imgStyle = {
-  width: "100%",
-  height: "260px",
-  objectFit: "cover",
-};
-
-const textWrapper = {
-  padding: "12px",
-};
-
-const titleStyle = {
-  fontSize: "16px",
-  fontWeight: "600",
-  margin: "6px 0",
-};
-
-const categoryStyle = {
-  fontSize: "13px",
-  color: "#888",
-  marginBottom: "4px",
-};
-
-const priceStyle = {
-  fontSize: "14px",
-  fontWeight: "bold",
-};
-
-const statusStyle = {
-  textAlign: "center",
-  marginTop: "60px",
-  fontSize: "18px",
-  color: "#555",
 };
 
 export default Home;

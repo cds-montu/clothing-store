@@ -1,5 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
+import {
+  Box,
+  Button,
+  Grid,
+  TextField,
+  Typography,
+  Alert,
+} from "@mui/material";
 
 const ProductForm = () => {
   const [formData, setFormData] = useState({
@@ -9,124 +17,111 @@ const ProductForm = () => {
     image: "",
   });
 
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.category || !formData.price || !formData.image) {
-      alert("⚠️ Please fill in all fields.");
+    setMessage("");
+    setError("");
+
+    const { name, category, price, image } = formData;
+    if (!name || !category || !price || !image) {
+      setError("⚠️ Please fill in all fields.");
       return;
     }
 
     try {
       await axios.post("http://localhost:5000/api/products/add", formData);
-      alert("✅ Product added successfully!");
+      setMessage("✅ Product added successfully!");
       setFormData({ name: "", category: "", price: "", image: "" });
-    } catch (error) {
-      alert("❌ Failed to add product.");
+
+      // Optional: Redirect to Home
+      // navigate("/");
+    } catch (err) {
+      console.error(err);
+      setError("❌ Failed to add product.");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} style={styles.form}>
-      <h3 style={styles.title}>➕ Add New Product</h3>
-      <div style={styles.grid}>
-        <div style={styles.inputGroup}>
-          <label style={styles.label}>Product Name</label>
-          <input
-            type="text"
-            name="name"
-            placeholder="e.g., Classic T-Shirt"
-            value={formData.name}
-            onChange={handleChange}
-            style={styles.input}
-          />
-        </div>
+    <Box sx={{ maxWidth: 800, mx: "auto", mt: 4, px: 2 }}>
+      <Typography variant="h5" fontWeight={600} gutterBottom>
+        ➕ Add New Product
+      </Typography>
 
-        <div style={styles.inputGroup}>
-          <label style={styles.label}>Category</label>
-          <input
-            type="text"
-            name="category"
-            placeholder="e.g., T-Shirts"
-            value={formData.category}
-            onChange={handleChange}
-            style={styles.input}
-          />
-        </div>
+      {message && <Alert severity="success" sx={{ mb: 2 }}>{message}</Alert>}
+      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
 
-        <div style={styles.inputGroup}>
-          <label style={styles.label}>Price (₹)</label>
-          <input
-            type="number"
-            name="price"
-            placeholder="e.g., 999"
-            value={formData.price}
-            onChange={handleChange}
-            style={styles.input}
-          />
-        </div>
+      <Box component="form" onSubmit={handleSubmit}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Product Name"
+              name="name"
+              fullWidth
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="e.g., Classic T-Shirt"
+            />
+          </Grid>
 
-        <div style={styles.inputGroup}>
-          <label style={styles.label}>Image URL</label>
-          <input
-            type="text"
-            name="image"
-            placeholder="e.g., https://example.com/image.jpg"
-            value={formData.image}
-            onChange={handleChange}
-            style={styles.input}
-          />
-        </div>
-      </div>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Category"
+              name="category"
+              fullWidth
+              value={formData.category}
+              onChange={handleChange}
+              placeholder="e.g., T-Shirts"
+            />
+          </Grid>
 
-      <button type="submit" style={styles.button}>Add Product</button>
-    </form>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Price (₹)"
+              name="price"
+              type="number"
+              fullWidth
+              value={formData.price}
+              onChange={handleChange}
+              placeholder="e.g., 999"
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Image URL"
+              name="image"
+              fullWidth
+              value={formData.image}
+              onChange={handleChange}
+              placeholder="https://example.com/image.jpg"
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <Button
+              type="submit"
+              variant="contained"
+              color="success"
+              fullWidth
+              sx={{ fontWeight: "bold", py: 1.5 }}
+            >
+              Add Product
+            </Button>
+          </Grid>
+        </Grid>
+      </Box>
+    </Box>
   );
-};
-
-const styles = {
-  form: {
-    padding: "20px",
-  },
-  title: {
-    marginBottom: "20px",
-    color: "#444",
-    fontWeight: "600",
-  },
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-    gap: "20px",
-    marginBottom: "20px",
-  },
-  inputGroup: {
-    display: "flex",
-    flexDirection: "column",
-  },
-  label: {
-    fontWeight: "500",
-    marginBottom: "6px",
-  },
-  input: {
-    padding: "10px",
-    border: "1px solid #ccc",
-    borderRadius: "6px",
-    fontSize: "14px",
-    outline: "none",
-  },
-  button: {
-    padding: "12px 20px",
-    backgroundColor: "#28a745",
-    color: "#fff",
-    fontWeight: "bold",
-    border: "none",
-    borderRadius: "6px",
-    cursor: "pointer",
-    transition: "all 0.3s",
-  },
 };
 
 export default ProductForm;
