@@ -1,20 +1,25 @@
 import { Box, Typography, Button, Container } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
-import fashionBanner from "../images/fashionBanner.png";
+import fashionBanner from "../images/fashionBanner.jpg";
+import heroImage from "../images/heroImage.jpg";
 
 
 
+const MotionTypography = motion(Typography);
+const MotionButton = motion(Button);
+const MotionBox = motion(Box);
 
 const Home = () => {
   const navigate = useNavigate();
+
   return (
     <Box>
+      {/* Hero Section */}
       <Box
         sx={{
           height: "100vh",
-          backgroundImage: `url(${fashionBanner})`,
+          backgroundImage: `url(${heroImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           display: "flex",
@@ -33,7 +38,10 @@ const Home = () => {
             bgcolor: "rgba(0,0,0,0.5)",
           }}
         />
-        <Box
+        <MotionBox
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
           sx={{
             zIndex: 1,
             color: "#fff",
@@ -41,76 +49,194 @@ const Home = () => {
             px: 4,
           }}
         >
-          <Typography variant="h3" fontWeight={700} gutterBottom>
+          <MotionTypography
+            variant="h3"
+            fontWeight={700}
+            gutterBottom
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.3 }}
+            marginTop={20}
+          >
             Discover Our Latest Collection
-          </Typography>
+          </MotionTypography>
           <Typography variant="h6" gutterBottom>
             Fashion that speaks for you
           </Typography>
-          <Button variant="contained" onClick={() => navigate("/new-arrivals")}>
-            Shop Now
+          <Button
+            // key={index}
+            component={Link}
+            // to={`/${label.replace("&", "").replace(" ", "")}`}
+            variant="contained"
+            sx={{
+              bgcolor: "#ff4081",
+              color: "#fff",
+              px: 4,
+              py: 1.5,
+              borderRadius: 2,
+              textTransform: "none",
+              fontWeight: "bold",
+              transition: "all 0.3s",
+              "&:hover": {
+
+                bgcolor: "#ad1457",
+                color: "#fff",
+                transform: "scale(1.05)",
+              },
+            }}
+          >
+            SHOP
           </Button>
-        </Box>
+        </MotionBox>
       </Box>
 
       {/* Trending Section */}
-      <Container sx={{ py: 8 }}>
+      <Container sx={{ py: 10, bgcolor: "#f9f9f9", borderRadius: 3 }}>
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <Typography variant="h4" textAlign="center" fontWeight="bold" gutterBottom>
-            Trending Now
+          <Typography variant="h4" textAlign="center" fontWeight="bold" gutterBottom
+            sx={{ color: "#1e1e1e" }}
+          >
+            🔥 Trending Now
           </Typography>
-          <Typography variant="subtitle1" textAlign="center" sx={{ maxWidth: 600, mx: "auto" }}>
-            Curated looks for this season. Handpicked styles that define confidence and elegance.
+
+          <Typography
+            variant="subtitle1"
+            textAlign="center"
+            sx={{ maxWidth: 600, mx: "auto", color: "#555" }}
+          >
+            Handpicked styles to elevate your fashion game. Discover what's hot this season!
           </Typography>
-          <Box sx={{ display: "flex", justifyContent: "center", gap: 4, mt: 5, flexWrap: "wrap" }}>
-            <Button component={Link} to="/Men" variant="outlined">Men</Button>
-            <Button component={Link} to="/Women" variant="outlined">Women</Button>
-            <Button component={Link} to="/TShirts" variant="outlined">T-Shirts</Button>
-            <Button component={Link} to="/Shirts" variant="outlined">Shirts</Button>
+
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              gap: 4,
+              mt: 6,
+              flexWrap: "wrap",
+            }}
+          >
+            {["Men", "Women", "T-Shirts", "Shirts"].map((label, index) => (
+              <Button
+                key={index}
+                component={Link}
+                to={`/${label.replace("&", "").replace(" ", "")}`}
+                variant="contained"
+                sx={{
+                  bgcolor: "#000",
+                  color: "#fff",
+                  px: 4,
+                  py: 1.5,
+                  borderRadius: 2,
+                  textTransform: "none",
+                  fontWeight: "bold",
+                  transition: "all 0.3s",
+                  "&:hover": {
+                    bgcolor: "#ff4081",
+                    transform: "scale(1.05)",
+                  },
+                }}
+              >
+                {label}
+              </Button>
+            ))}
           </Box>
         </motion.div>
       </Container>
 
       {/* Mood Section */}
-      <Box
+      <motion.div
+        initial={{ backgroundPositionY: "100%" }}
+        whileInView={{ backgroundPositionY: "50%" }}
+        transition={{ duration: 1.2 }}
+      >
+        <Box
+          sx={{
+            backgroundImage: `url(${fashionBanner})`,
+            backgroundAttachment: "fixed",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            height: "70vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Typography
+            variant="h3"
+            sx={{
+              backgroundColor: "rgba(255,255,255,0.7)",
+              px: 4,
+              py: 2,
+              borderRadius: 2,
+              textAlign: "center",
+            }}
+          >
+            Fashion is a language. Speak yours.
+          </Typography>
+        </Box>
+      </motion.div>
+
+      {/* Final CTA */}
+      <Container
+        maxWidth="md"
         sx={{
-          backgroundImage: `url("https://images.unsplash.com/photo-1593032457869-5e8d6c9c9b6f")`,
-          backgroundAttachment: "fixed",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          height: "70vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          py: 10,
+          textAlign: "center",
+          backgroundColor: "#fef4f7",
+          borderRadius: 4,
+          boxShadow: "0 10px 30px rgba(0,0,0,0.05)",
         }}
       >
-        <Typography
-          variant="h3"
-          sx={{ backgroundColor: "rgba(255,255,255,0.7)", px: 4, py: 2, borderRadius: 2 }}
-        >
-          Fashion is a language. Speak yours.
-        </Typography>
-      </Box>
-
-      {/* CTA Final Section */}
-      <Container sx={{ py: 10, textAlign: "center" }}>
         <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
+          initial={{ scale: 0.9, opacity: 0 }}
           whileInView={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.6 }}
         >
-          <Typography variant="h4" gutterBottom fontWeight="bold">
-            Ready to Redefine Your Look?
+          <Typography
+            variant="h4"
+            gutterBottom
+            fontWeight="bold"
+            sx={{ color: "#0c0c0cff" }}
+          >
+            ✨ Ready to Redefine Your Look?
           </Typography>
-          <Button component={Link} to="/All" variant="contained" size="large">
+          <Typography
+            variant="subtitle1"
+            sx={{ mb: 4, color: "#555" }}
+          >
+            Explore our collection and discover the perfect style for you.
+          </Typography>
+
+          <MotionButton
+            component={Link}
+            to="/All"
+            variant="contained"
+            size="large"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.3 }}
+            sx={{
+              backgroundColor:"#ff4081",
+              color: "#fff",
+              px: 5,
+              py: 1.5,
+              borderRadius: 3,
+              fontWeight: "bold",
+              textTransform: "none",
+              "&:hover": {
+                backgroundColor: "#ad1457",
+              },
+            }}
+          >
             Browse All Products
-          </Button>
+          </MotionButton>
         </motion.div>
       </Container>
+
     </Box>
   );
 };

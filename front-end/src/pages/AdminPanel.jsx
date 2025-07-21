@@ -1,39 +1,75 @@
 import React from "react";
 import ProductForm from "../components/ProductForm";
 import ProductBulkUpload from "../components/ProductBulkUpload";
+import { Box, Typography, Container, Paper } from "@mui/material";
+import { motion } from "framer-motion";
+
+const MotionBox = motion(Box);
 
 const AdminPanel = () => {
   return (
-    <div style={styles.container}>
-      <h2 style={styles.heading}>🛠️ Admin Panel - Add Products</h2>
-      <div style={styles.card}>
-        <ProductForm />
-      </div>
-      <div style={styles.card}>
-        <ProductBulkUpload />
-      </div>
-    </div>
-  );
-};
+    <Container maxWidth="md" sx={{ py: 6 }}>
+      <MotionBox
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        sx={{
+          textAlign: "center",
+          mb: 4,
+        }}
+      >
+        <Typography
+          variant="h4"
+          fontWeight="bold"
+          sx={{ color: "#ff4081", mb: 1 }}
+        >
+          🛠️ Admin Panel
+        </Typography>
+        <Typography variant="subtitle1" sx={{ color: "#555" }}>
+          Add or Upload Products to Your Store
+        </Typography>
+      </MotionBox>
 
-const styles = {
-  container: {
-    maxWidth: "900px",
-    margin: "30px auto",
-    padding: "20px",
-    fontFamily: "sans-serif",
-  },
-  heading: {
-    marginBottom: "20px",
-    color: "#333",
-  },
-  card: {
-    background: "#fff",
-    padding: "25px",
-    borderRadius: "10px",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-    marginBottom: "30px",
-  },
+      <Paper
+        elevation={4}
+        sx={{
+          mb: 5,
+          p: 4,
+          borderRadius: 3,
+          backgroundColor: "#fff0f5",
+          boxShadow: "0 6px 20px rgba(0,0,0,0.1)",
+        }}
+      >
+        <Typography
+          variant="h6"
+          fontWeight="bold"
+          sx={{ mb: 2, color: "#ad1457" }}
+        >
+          ➕ Add Single Product
+        </Typography>
+        <ProductForm />
+      </Paper>
+
+      <Paper
+        elevation={4}
+        sx={{
+          p: 4,
+          borderRadius: 3,
+          backgroundColor: "#fce4ec",
+          boxShadow: "0 6px 20px rgba(0,0,0,0.1)",
+        }}
+      >
+        <Typography
+          variant="h6"
+          fontWeight="bold"
+          sx={{ mb: 2, color: "#ad1457" }}
+        >
+          📦 Bulk Upload Products
+        </Typography>
+        <ProductBulkUpload />
+      </Paper>
+    </Container>
+  );
 };
 
 export default AdminPanel;

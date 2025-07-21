@@ -1,24 +1,67 @@
+import React from "react";
+import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { motion } from "framer-motion";
 
-export default function Navbar() {
-  const totalQty = useSelector(state => state.cart.reduce((sum, i) => sum + i.quantity, 0));
+const MotionButton = motion(Button);
+
+const Navbar = () => {
+  const isAdmin = true; // Set to false to simulate a normal user
+
+  const navLinks = [
+    { label: "Home", path: "/" },
+    { label: "New Arrivals", path: "/NewArrivals" },
+    { label: "All", path: "/All" },
+    { label: "Men", path: "/Men" },
+    { label: "Women", path: "/Women" },
+    { label: "T-Shirts", path: "/TShirts" },
+    { label: "Shirts", path: "/Shirts" },
+    { label: "Cart", path: "/Cart" },
+  ];
+
+  if (isAdmin) {
+    navLinks.push({ label: "Admin Panel", path: "/admin" });
+  }
+
   return (
-    <nav style={{ display:'flex', justifyContent:'space-between', padding:'10px 20px', background:'#fff', boxShadow:'0 2px 5px rgba(0,0,0,0.1)' }}>
-      <div>
-        <Link to="/" style={{ textDecoration:'none', fontSize:'20px', fontWeight:'bold', color:'#333' }}>POINT BREAK</Link>
-      </div>
-      <div style={{ display:'flex', gap:'15px' }}>
-        {/* <Link to="/home">Home</Link> */}
-        <Link to="/admin">Admin Panel</Link>
-        <Link to="/new-arrivals">New Arrivals</Link>
-        <Link to="/men">Men</Link>
-        <Link to="/women">Women</Link>
-        <Link to="/tshirts">T-Shirts</Link>
-        <Link to="/shirts">Shirts</Link>
-        <Link to="/top-bottom">Top & Bottom</Link>
-        <Link to="/cart">🛒 Cart ({totalQty})</Link>
-      </div>
-    </nav>
+    <AppBar
+      position="sticky"
+      sx={{
+        background: "#ff4081",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+        zIndex: 10,
+      }}
+    >
+      <Toolbar sx={{ display: "flex", justifyContent: "space-between", px: 3 }}>
+        <Typography variant="h6" sx={{ fontWeight: "bold", color: "#000" }}>
+          POINT BREAK
+        </Typography>
+
+        <Box sx={{ display: "flex", gap: 2 }}>
+          {navLinks.map((nav, index) => (
+            <MotionButton
+              key={index}
+              component={Link}
+              to={nav.path}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              sx={{
+                color: "#000",
+                textTransform: "none",
+                fontWeight: "bold",
+                fontSize: "1rem",
+                "&:hover": {
+                  color: "#fff",
+                },
+              }}
+            >
+              {nav.label}
+            </MotionButton>
+          ))}
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
-}
+};
+
+export default Navbar;
