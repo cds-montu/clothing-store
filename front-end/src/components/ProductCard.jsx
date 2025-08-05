@@ -1,28 +1,21 @@
 import { useDispatch, useSelector } from "react-redux";
+import { addToCart, incrementQuantity, decrementQuantity } from "../redux/slices/cartSlice";
 import { Link } from "react-router-dom";
-import {
-  addToCart,
-  incrementQuantity,
-  decrementQuantity,
-} from "../redux/slices/cartSlice";
 
-export default function ProductCard({ product }) {
+const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
-  const item = useSelector((state) =>
-    state.cart.find((i) => i.id === product.id)
-  );
+  const cart = useSelector((state) => state.cart);
+  const item = cart.find((i) => i.id === product.id);
 
   return (
-    <div
-      className="product-card"
-      style={styles.card}
-    >
-      <Link
-        to={`/product/${product.id}`}
-        style={{ textDecoration: "none", color: "#333" }}
-      >
+    <div style={styles.card}>
+      <Link to={`/product/${product.id}`} style={{ textDecoration: "none", color: "#333" }}>
         <div style={styles.imageWrapper}>
-          <img src={product.image} alt={product.name} style={styles.image} />
+          <img
+            src={product.image || "https://via.placeholder.com/200"}
+            alt={product.name}
+            style={styles.image}
+          />
         </div>
         <h3 style={styles.name}>{product.name}</h3>
       </Link>
@@ -31,13 +24,9 @@ export default function ProductCard({ product }) {
 
       {item ? (
         <div style={styles.counter}>
-          <button style={styles.qtyBtn} onClick={() => dispatch(decrementQuantity(product.id))}>
-            −
-          </button>
+          <button style={styles.qtyBtn} onClick={() => dispatch(decrementQuantity(product.id))}>−</button>
           <span style={styles.qty}>{item.quantity}</span>
-          <button style={styles.qtyBtn} onClick={() => dispatch(incrementQuantity(product.id))}>
-            +
-          </button>
+          <button style={styles.qtyBtn} onClick={() => dispatch(incrementQuantity(product.id))}>+</button>
         </div>
       ) : (
         <button
@@ -49,69 +38,91 @@ export default function ProductCard({ product }) {
       )}
     </div>
   );
-}
+};
 
 const styles = {
+  grid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+    gap: "20px",
+    padding: "20px",
+    maxWidth: "1200px",
+    margin: "auto",
+  },
   card: {
     borderRadius: "12px",
     padding: "16px",
-    textAlign: "center",
     backgroundColor: "#fff",
-    boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
-    transition: "transform 0.3s, box-shadow 0.3s",
-    cursor: "pointer",
-  },
-  imageWrapper: {
-    overflow: "hidden",
-    borderRadius: "10px",
+    boxShadow: "0 4px 16px rgba(0,0,0,0.1)",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    transition: "transform 0.3s",
   },
   image: {
     width: "100%",
-    height: "260px",
+    height: "220px",
     objectFit: "cover",
-    transition: "transform 0.4s ease",
+    borderRadius: "8px",
   },
-  name: {
-    fontSize: "16px",
-    fontWeight: "600",
+  details: {
+    textAlign: "center",
     marginTop: "12px",
+  },
+  title: {
+    fontSize: "16px",
+    fontWeight: "bold",
+    marginBottom: "6px",
+  },
+  category: {
+    fontSize: "14px",
+    color: "#777",
+    marginBottom: "6px",
   },
   price: {
-    fontSize: "15px",
-    color: "#007bff",
+    fontSize: "16px",
+    color: "#ff4081",
     fontWeight: "500",
-    marginTop: "6px",
+    margin: "6px 0",
   },
   addButton: {
-    marginTop: "12px",
-    backgroundColor: "#ff5722",
+    backgroundColor: "#ff4081",
     color: "#fff",
     border: "none",
     borderRadius: "6px",
-    padding: "10px 16px",
+    padding: "10px 18px",
     fontSize: "14px",
     fontWeight: "bold",
     cursor: "pointer",
+    marginTop: "10px",
     transition: "background 0.3s ease",
   },
   counter: {
     display: "flex",
-    justifyContent: "center",
     alignItems: "center",
+    justifyContent: "center",
     gap: "10px",
     marginTop: "10px",
   },
   qtyBtn: {
-    padding: "6px 10px",
-    fontSize: "16px",
-    fontWeight: "bold",
-    borderRadius: "6px",
-    backgroundColor: "#eee",
+    fontSize: "18px",
+    backgroundColor: "#f0f0f0",
     border: "1px solid #ccc",
+    padding: "6px 12px",
+    borderRadius: "5px",
     cursor: "pointer",
   },
   qty: {
     fontWeight: "bold",
-    fontSize: "15px",
+    fontSize: "16px",
+  },
+  empty: {
+    textAlign: "center",
+    width: "100%",
+    fontSize: "18px",
+    padding: "50px",
+    color: "#888",
   },
 };
+
+export default ProductCard;

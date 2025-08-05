@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { fetchProducts } from "../redux/slices/productSlice";
 
 const ProductBulkUpload = () => {
   const [file, setFile] = useState(null);
+  const dispatch = useDispatch();
 
   const handleUpload = async () => {
     if (!file) return alert("Please select a file");
@@ -12,6 +15,7 @@ const ProductBulkUpload = () => {
     try {
       await axios.post("http://localhost:5000/api/products/bulk-upload", formData);
       alert("✅ Bulk upload successful!");
+      dispatch(fetchProducts()); // ✅ Refresh list
     } catch (err) {
       alert("❌ Bulk upload failed");
     }

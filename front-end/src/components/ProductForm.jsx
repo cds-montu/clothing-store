@@ -8,6 +8,8 @@ import {
   Typography,
   Alert,
 } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { fetchProducts } from "../redux/slices/productSlice";
 
 const ProductForm = () => {
   const [formData, setFormData] = useState({
@@ -19,6 +21,7 @@ const ProductForm = () => {
 
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -42,9 +45,7 @@ const ProductForm = () => {
       await axios.post("http://localhost:5000/api/products/add", formData);
       setMessage("✅ Product added successfully!");
       setFormData({ name: "", category: "", price: "", image: "" });
-
-      // Optional: Redirect to Home
-      // navigate("/");
+      dispatch(fetchProducts()); // ✅ Refresh list
     } catch (err) {
       console.error(err);
       setError("❌ Failed to add product.");

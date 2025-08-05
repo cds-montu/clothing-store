@@ -1,12 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ProductForm from "../components/ProductForm";
 import ProductBulkUpload from "../components/ProductBulkUpload";
 import { Box, Typography, Container, Paper } from "@mui/material";
 import { motion } from "framer-motion";
+import { useDispatch } from "react-redux";
+import { fetchProducts } from "../redux/slices/productSlice";
 
 const MotionBox = motion(Box);
 
 const AdminPanel = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchProducts()); // ✅ Fetch once on load
+  }, [dispatch]);
+
   return (
     <Container maxWidth="md" sx={{ py: 6 }}>
       <MotionBox

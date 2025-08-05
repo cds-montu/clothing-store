@@ -2,30 +2,26 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../redux/slices/productSlice";
 import ProductList from "../components/ProductList";
-import { Typography, Container } from "@mui/material";
 
 const NewArrivals = () => {
   const dispatch = useDispatch();
-  const { items } = useSelector((state) => state.products);
+  const { items, loading } = useSelector((state) => state.products);
 
-useEffect(() => {
-  if (!items.length) {
+  useEffect(() => {
     dispatch(fetchProducts());
-  }
-}, [dispatch, items.length]);
+  }, [dispatch]);
 
+  // const newArrivalProducts = items.filter(
+  //   (p) => p.category.toLowerCase() === "new arrivals"
+  // );
 
-  const filteredProducts = items.filter(
-    (product) => product.category?.toLowerCase() === "new arrivals".toLowerCase()
-  );
+  if (loading) return <p style={{ textAlign: "center" }}>Loading...</p>;
 
   return (
-    <Container sx={{ py: 6 }}>
-      <Typography variant="h4" fontWeight="bold" gutterBottom textAlign="center">
-        New Arrivals 👕🧥
-      </Typography>
-      <ProductList products={filteredProducts} />
-    </Container>
+    <div>
+      {/* <h2 style={{ textAlign: "center", marginTop: 30 }}></h2> */}
+      <ProductList products={items} />
+    </div>
   );
 };
 

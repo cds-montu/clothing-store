@@ -1,64 +1,54 @@
 import express from "express";
 import db from "../db/db.js";
-import multer from "multer";
-import csv from "csv-parser";
 import fs from "fs";
-import path from "path";
+import csv from "csv-parser";
 
 const router = express.Router();
-const upload = multer({ dest: "uploads/" });
 
-// GET all products
+// GET /api/products
 router.get("/", async (req, res) => {
   try {
     const products = await db("products").select("*");
     res.json(products);
-  } catch (err) {
+  } catch {
     res.status(500).json({ error: "Failed to fetch products" });
   }
 });
 
-// POST single product
+// POST /api/products/add
 router.post("/add", async (req, res) => {
   const { name, category, price, image } = req.body;
   try {
     await db("products").insert({ name, category, price, image });
     res.status(201).json({ message: "Product added" });
   } catch (err) {
-    console.error("Insert Error:", err);
-    res.status(500).json({ error: "Failed to add" });
+    console.error(err);
+    res.status(500).json({ error: "Failed to add product" });
   }
 });
 
-// ✅ BULK UPLOAD - fixed version
+// POST /api/products/bulk-upload
 router.post("/bulk-upload", async (req, res) => {
-  try {
-    if (!req.files || !req.files.file) {
-      return res.status(400).json({ error: "No file uploaded" });
-    }
+  if (!req.files || !req.files.file)
+    return res.status(400).json({ error: "No file uploaded" });
 
-    const file = req.files.file;
-    const filePath = `./uploads/${file.name}`;
-    await file.mv(filePath);
+  const file = req.files.file;
+  const path = "./uploads/" + file.name;
+  await file.mv(path);
 
-    const results = [];
-    fs.createReadStream(filePath)
-      .pipe(csv())
-      .on("data", (data) => results.push(data))
-      .on("end", async () => {
-        try {
-          await db("products").insert(results);
-          res.json({ message: "Bulk upload successful" });
-        } catch (err) {
-          console.error("DB Insert Error:", err);
-          res.status(500).json({ error: "Failed to insert products" });
-        }
-      });
-  } catch (err) {
-    console.error("Upload Error:", err);
-    res.status(500).json({ error: "Bulk upload failed" });
-  }
+  const rows = [];
+  fs.createReadStream(path)
+    .pipe(csv())
+    .on("data", data => rows.push(data))
+    .on("end", async () => {
+      try {
+        await db("products").insert(rows);
+        res.json({ message: "Bulk upload successful" });
+      } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to insert products" });
+      }
+    });
 });
-
 
 export default router;

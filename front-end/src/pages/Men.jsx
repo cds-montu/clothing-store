@@ -1,10 +1,21 @@
-// import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProducts } from "../redux/slices/productSlice";
 import ProductList from "../components/ProductList";
-import { PRODUCTS } from "../data/products"
 
 export default function Men() {
-  // const items = useSelector((state) => state.products.items);
-  const menProducts = PRODUCTS.filter(p => p.category === "Men");
+  const dispatch = useDispatch();
+  const { items, loading } = useSelector((state) => state.products);
+
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
+
+  const menProducts = items.filter(
+    (p) => p.category.toLowerCase() === "men"
+  );
+
+  if (loading) return <p style={{ textAlign: "center" }}>Loading...</p>;
 
   return <ProductList products={menProducts} />;
 }

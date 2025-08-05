@@ -1,14 +1,22 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import ProductCard from "../components/ProductCard"; // Assuming you have a card component
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchProducts } from "../redux/slices/productSlice";
+import ProductCard from "../components/ProductCard";
 import { Grid, Typography } from "@mui/material";
 
 const Women = () => {
-  const products = useSelector((state) => state.products.items);
+  const dispatch = useDispatch();
+  const { items, loading } = useSelector((state) => state.products);
 
-  const womenProducts = products.filter(
-    (product) => product.category === "Women"
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
+
+  const womenProducts = items.filter(
+    (product) => product.category.toLowerCase() === "women"
   );
+
+  if (loading) return <p style={{ textAlign: "center" }}>Loading...</p>;
 
   return (
     <div style={{ padding: "20px" }}>

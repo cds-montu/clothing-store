@@ -3,6 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import fashionBanner from "../images/fashionBanner.jpg";
 import heroImage from "../images/heroImage.jpg";
+import { fetchProducts } from "../redux/slices/productSlice";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
 
 
 
@@ -12,6 +15,12 @@ const MotionBox = motion(Box);
 
 const Home = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+  dispatch(fetchProducts());
+}, [dispatch]);
+
 
   return (
     <Box>
