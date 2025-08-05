@@ -51,14 +51,14 @@ const AdminPanel = () => {
         <Typography
           variant="h6"
           fontWeight="bold"
-          sx={{ mb: 2, color: "#ad1457" }}
+          sx={{ mb: 2, color: "#d9196cff" }}
         >
           ➕ Add Single Product
         </Typography>
         <ProductForm />
       </Paper>
 
-      <Paper
+      {/* <Paper
         elevation={4}
         sx={{
           p: 4,
@@ -75,7 +75,7 @@ const AdminPanel = () => {
           📦 Bulk Upload Products
         </Typography>
         <ProductBulkUpload />
-      </Paper>
+      </Paper> */}
     </Container>
   );
 };

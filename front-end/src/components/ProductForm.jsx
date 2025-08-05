@@ -54,9 +54,6 @@ const ProductForm = () => {
 
   return (
     <Box sx={{ maxWidth: 800, mx: "auto", mt: 4, px: 2 }}>
-      <Typography variant="h5" fontWeight={600} gutterBottom>
-        ➕ Add New Product
-      </Typography>
 
       {message && <Alert severity="success" sx={{ mb: 2 }}>{message}</Alert>}
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
@@ -112,9 +109,8 @@ const ProductForm = () => {
             <Button
               type="submit"
               variant="contained"
-              color="success"
               fullWidth
-              sx={{ fontWeight: "bold", py: 1.5 }}
+              sx={{ fontWeight: "bold", py: 1.5,backgroundColor:"#ff4081" }}
             >
               Add Product
             </Button>

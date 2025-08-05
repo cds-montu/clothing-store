@@ -28,27 +28,27 @@ router.post("/add", async (req, res) => {
 });
 
 // POST /api/products/bulk-upload
-router.post("/bulk-upload", async (req, res) => {
-  if (!req.files || !req.files.file)
-    return res.status(400).json({ error: "No file uploaded" });
+// router.post("/bulk-upload", async (req, res) => {
+//   if (!req.files || !req.files.file)
+//     return res.status(400).json({ error: "No file uploaded" });
 
-  const file = req.files.file;
-  const path = "./uploads/" + file.name;
-  await file.mv(path);
+//   const file = req.files.file;
+//   const path = "./uploads/" + file.name;
+//   await file.mv(path);
 
-  const rows = [];
-  fs.createReadStream(path)
-    .pipe(csv())
-    .on("data", data => rows.push(data))
-    .on("end", async () => {
-      try {
-        await db("products").insert(rows);
-        res.json({ message: "Bulk upload successful" });
-      } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Failed to insert products" });
-      }
-    });
-});
+//   const rows = [];
+//   fs.createReadStream(path)
+//     .pipe(csv())
+//     .on("data", data => rows.push(data))
+//     .on("end", async () => {
+//       try {
+//         await db("products").insert(rows);
+//         res.json({ message: "Bulk upload successful" });
+//       } catch (err) {
+//         console.error(err);
+//         res.status(500).json({ error: "Failed to insert products" });
+//       }
+//     });
+// });
 
 export default router;
